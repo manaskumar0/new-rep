@@ -19,14 +19,14 @@ MongoClient.connect('mongodb://localhost:27017/dbtodoapp', (err, db) => {
     console.log('Connected to MongoDb server Sucessfully');
 
 
-    // db.collection('todos').insertOne({
-    //     text: 'Mk',
-    //     completed: false
-    // }, (err, res) => {
-    //     if(err)
-    //         return console.log('unable to insert data', err);
-    //     console.log(JSON.stringify(res.ops, undefined, 2));
-    // });
+    db.collection('todos').insertOne({
+        text: 'Shopping Nuts',
+        completed: false
+    }, (err, res) => {
+        if(err)
+            return console.log('unable to insert data', err);
+        console.log(JSON.stringify(res.ops, undefined, 2));
+    });
 
     // db.collection('Users').insertOne({
     //     name: 'MK',

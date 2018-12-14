@@ -28,17 +28,17 @@ console.log('Connected to MongoDb server Sucessfully');
 // });
 
 
-db.collection('todos').find().count().then((count) => {
-    console.log(`Todos Total: ${count}`);
-}, (err) => {
-    console.log('Unable to Fetch the record(s)', err);
-});
-
-db.collection('Users').find({name: 'MK'}).toArray().then((docs) => {
-    console.log(JSON.stringify(docs, undefined, 2));
-}, (err) => {
-    console.log('Not Find', err)
-});
+// db.collection('todos').find().count().then((count) => {
+//     console.log(`Todos Total: ${count}`);
+// }, (err) => {
+//     console.log('Unable to Fetch the record(s)', err);
+// });
+//
+// db.collection('Users').find({name: 'MK'}).toArray().then((docs) => {
+//     console.log(JSON.stringify(docs, undefined, 2));
+// }, (err) => {
+//     console.log('Not Find', err)
+// });
 
 db.close();
 

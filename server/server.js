@@ -96,6 +96,15 @@ app.post('/todo', (req, res) => {
 });
 });
 
+app.get('/todo', (req, res) => {
+    todo.find().then((todo) => {
+        res.send({todo});
+}, (err) => {
+        res.status(400).send(err);
+});
+});
+
+
 app.listen(3000, () => {
     console.log('Started on 3000');
 });

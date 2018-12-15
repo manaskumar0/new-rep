@@ -72,6 +72,10 @@
 
 //PostMan
 
+//Heroku
+
+const port = process.env.PORT || 3000
+
 const express = require('express');
 const bodyparser = require('body-parser');
 
@@ -131,8 +135,8 @@ app.get('/todo/:id', (req,res) => {
 
 });
 
-app.listen(3000, () => {
-    console.log('Started on 3000');
+app.listen(port, () => {
+    console.log(`Started Port at ${port}`);
 });
 
 module.exports = {app};

@@ -107,3 +107,41 @@ describe('Get Todo ID', () => {
                     .end(done);
    });
 });
+
+describe('For Delete', () => {
+   it('Should remove a todp', (done) => {
+       var id = Todo[1]._id.toHexString();
+       request(app)
+            .delete(`/todo/${id}`)
+           .expect(200)
+           .expect((res) => {
+                expect(res.body.todo._id).toBe(id);
+       })
+           .end((err, res) => {
+               if(err)
+                    return done(err);
+
+               todo.findById(id).then((todo) => {
+                  expect(todo).toNotExist();
+                  done();
+               }).catch((e) => done(e));
+            })
+});
+
+   it('should return 404 if todo not found', (done) => {
+       var hexid = new ObjectID().toHexString();
+
+request(app)
+    .get(`/todo/${hexid}`)
+    .expect(404)
+    .end(done);
+   });
+
+   it('Should return 404 if Id is invalid', (done) => {
+       request(app)
+       .get('/todo/123abc')
+           .expect(404)
+           .end(done);
+   });
+
+});

@@ -135,6 +135,30 @@ app.get('/todo/:id', (req,res) => {
 
 });
 
+//Delete Rout
+
+app.delete('/todo/:id', (req, res) =>
+{
+    var id = req.params.id;
+
+    console.log(id);
+    if(!ObjectID.isValid(id))
+    {
+        return res.status(404).send("Invalid ID");
+    }
+
+    todo.findByIdAndRemove(id).then((todo) => {
+        if(!todo)
+            return res.status(404).send("No Todo");
+
+        res.send(todo);
+    }).catch((err) => {
+            res.status(400).send("catch");
+});
+
+});
+
+
 app.listen(port, () => {
     console.log(`Started Port at ${port}`);
 });

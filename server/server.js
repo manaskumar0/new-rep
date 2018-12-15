@@ -85,6 +85,7 @@ var {user} = require('./models/user');
 
 const {ObjectID} = require('mongodb');
 
+const _ = require('lodash');
 var app =express();
 
 app.use(bodyparser.json());
@@ -158,9 +159,40 @@ app.delete('/todo/:id', (req, res) =>
 
 });
 
+//UPDATE
+
+app.patch('/todo/:id',(req, res) => {
+
+    var id = req.params.id;
+    var body = _.pick(req.body, ['text','completed']);
+    if(!ObjectID.isValid(id))
+            return res.status(404).send("Id is not valid");
+
+    if(_.isBoolean(body.completed) && body.completed)
+    {
+        body.completedat = new Date().getTime();
+    }
+    else
+    {
+        body.completed = false;
+        body.completedat = null;
+    }
+
+    todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo) => {
+            if(!todo)
+                return res.status(404).send("No todo is available");
+
+            res.send({todo});
+    }).catch((e) => {
+        res.status(404).send("Catch");
+});
+
+});
 
 app.listen(port, () => {
     console.log(`Started Port at ${port}`);
 });
+
+
 
 module.exports = {app};

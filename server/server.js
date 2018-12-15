@@ -85,26 +85,26 @@ var app =express();
 
 app.use(bodyparser.json());
 
-// app.post('/todo', (req, res) => {
-//     console.log(req.body);
-//     var t = new todo({
-//         text: req.body.text
-//     });
-//     t.save().then((doc) => {
-//         res.send(doc);
-//     }, (err) => {
-//         res.status(400).send(err);
-//         //console.log('error', err);
-// });
-// });
-//
-// app.get('/todo', (req, res) => {
-//     todo.find().then((todo) => {
-//         res.send({todo});
-// }, (err) => {
-//         res.status(400).send(err);
-// });
-// });
+app.post('/todo', (req, res) => {
+    console.log(req.body);
+    var t = new todo({
+        text: req.body.text
+    });
+    t.save().then((doc) => {
+        res.send(doc);
+    }, (err) => {
+        res.status(400).send(err);
+        //console.log('error', err);
+});
+});
+
+app.get('/todo', (req, res) => {
+    todo.find().then((todo) => {
+        res.send({todo});
+}, (err) => {
+        res.status(400).send(err);
+});
+});
 
 
 //Individual Resourse

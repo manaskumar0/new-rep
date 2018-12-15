@@ -79,31 +79,57 @@ var {mongoose} = require('./db/mongoose');
 var {todo} = require('./models/todo');
 var {user} = require('./models/user');
 
+const {ObjectID} = require('mongodb');
+
 var app =express();
 
 app.use(bodyparser.json());
 
-app.post('/todo', (req, res) => {
-    console.log(req.body);
-    var t = new todo({
-        text: req.body.text
-    });
-    t.save().then((doc) => {
-        res.send(doc);
-    }, (err) => {
-        res.status(400).send(err);
-        //console.log('error', err);
-});
+// app.post('/todo', (req, res) => {
+//     console.log(req.body);
+//     var t = new todo({
+//         text: req.body.text
+//     });
+//     t.save().then((doc) => {
+//         res.send(doc);
+//     }, (err) => {
+//         res.status(400).send(err);
+//         //console.log('error', err);
+// });
+// });
+//
+// app.get('/todo', (req, res) => {
+//     todo.find().then((todo) => {
+//         res.send({todo});
+// }, (err) => {
+//         res.status(400).send(err);
+// });
+// });
+
+
+//Individual Resourse
+
+app.get('/todo/:id', (req,res) => {
+        var id = req.params.id;
+        //res.send(req.params);
+
+        if(!ObjectID.isValid(id))
+        {
+            return res.status(404).send("no match Id");
+        }
+
+
+        todo.findById(id).then((todo) => {
+            if(!todo)
+                return res.status(404).send("no data in collection");
+
+            res.send({todo});
+
+        }).catch((e) => {
+            res.status(400).send();
 });
 
-app.get('/todo', (req, res) => {
-    todo.find().then((todo) => {
-        res.send({todo});
-}, (err) => {
-        res.status(400).send(err);
 });
-});
-
 
 app.listen(3000, () => {
     console.log('Started on 3000');

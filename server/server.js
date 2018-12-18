@@ -74,7 +74,7 @@
 
 //Heroku
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3000;
 
 const express = require('express');
 const bodyparser = require('body-parser');
@@ -187,6 +187,30 @@ app.patch('/todo/:id',(req, res) => {
         res.status(404).send("Catch");
 });
 
+});
+
+
+//Login
+
+
+app.post('/user',(req, res) => {
+    console.log(req.body.text);
+    var body = _.pick(req.body, ['name' ,'email', 'password']);
+    var useer = new user(body);
+
+    console.log(body);
+
+    useer.save().then(() => {
+        //res.send(u);
+        return useer.generateAuthToken();
+
+    }).then((token) => {
+
+        res.header('x-auth', token).send(useer);
+
+}).catch((e) => {
+        res.status(400).send(e);
+});
 });
 
 app.listen(port, () => {

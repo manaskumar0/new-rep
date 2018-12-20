@@ -74,7 +74,7 @@
 
 //Heroku
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 const express = require('express');
 const bodyparser = require('body-parser');
@@ -84,6 +84,8 @@ var {todo} = require('./models/todo');
 var {user} = require('./models/user');
 
 const {ObjectID} = require('mongodb');
+
+var {authenticate} = require('./middleware/authenticate');
 
 const _ = require('lodash');
 var app =express();
@@ -213,9 +215,67 @@ app.post('/user',(req, res) => {
 });
 });
 
+//auth middleware
+//
+// var authenticate = (req, res, next) => {
+//
+//     var token = req.header('x-auth');
+//     user.findByToken(token).then((u) => {
+//         if(!u){
+//         return Promise.reject();
+//     }
+//     req.u = u;
+//     req.token= token;
+//     next();
+// }).catch((e) => {
+//         res.status(401).send("authentication is required");
+// });
+//
+// };
+
+//private route
+
+app.get('/user/me', authenticate, (req, res) =>{
+    res.send(req.user);
+})
+
+//
+// app.get('/user/me', (req, res) =>{
+//     var token = req.header('x-auth');
+// user.findByToken(token).then((u) => {
+//     if(!u){
+//     return Promise.reject();
+// }
+// res.send(u);
+// }).catch((e) => {
+//     res.status(401).send("authentication is required");
+// });
+// })
+
+
+//login 
+app.post('/login',(req, res) => {
+    var body = _.pick(req.body,['email', 'password']);
+    console.log(body);
+    user.findbycred(body.email, body.password).then((u) => {
+        return u.generateAuthToken().then((token) => {
+            res.header('x-auth', token).send(u);
+          });   
+     }).catch((e) => {
+        console.log(e);
+        res.status(400).send("no user");
+    });
+
+
+});
+
 app.listen(port, () => {
     console.log(`Started Port at ${port}`);
 });
+
+
+
+
 
 
 
